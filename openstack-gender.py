@@ -5,7 +5,9 @@ import gender
 import json
 import requests
 
-url = 'http://stackalytics.com/api/1.0/stats/engineers'
+release = 'kilo'
+url = 'http://stackalytics.com/api/1.0/stats/engineers?release='
+url += release
 params = dict ()
 resp = requests.get(url=url, params=params)
 devs = json.loads(resp.text)
