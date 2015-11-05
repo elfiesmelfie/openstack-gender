@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # matt@nycresistor.com - guesses gender count on openstack contributors
 
-import gender
 import json
 import requests
 
-release = 'kilo'
+release = 'liberty'
 url = 'http://stackalytics.com/api/1.0/stats/engineers?release='
 url += release
 params = dict ()
@@ -19,9 +18,14 @@ unknowncount = 0
 for developers in devs['stats']:
     name = developers['name']
     sname = name.split()
-    fname = sname[0].upper()
+    fname = sname[0]
+    sname = sname[-1]
+
     try:
-        gendev = gender.gender[fname]
+        nurl = "http://api.namsor.com/onomastics/api/json/gender/{}/{}".format(fname,sname)
+        resp = requests.get(url=nurl)
+        gendev = json.loads(resp.text)['gender']
+
         if gendev == 'male' :
             malecount += 1
         else:
@@ -31,5 +35,5 @@ for developers in devs['stats']:
 
 print "females : %s" % femalecount
 print "males : %s" % malecount
-print "unknowncount : %s" %unknowncount 
+print "unknowncount : %s" %unknowncount
 
